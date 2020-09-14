@@ -9,7 +9,7 @@ $query_str = "";
 if(!is_null($gene)){
     $query_str = "
         SELECT *
-        FROM soykb.Genescape_output
+        FROM soykb.Genescape_output2
         WHERE (Gene IN ('".$gene."'));
     ";
 
