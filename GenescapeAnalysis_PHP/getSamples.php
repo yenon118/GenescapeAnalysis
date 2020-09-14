@@ -11,51 +11,51 @@ $query_str = "";
 
 if(preg_match("/soja/i", strval($key))){
     $query_str = "
-        SELECT Type, Category, Number, Country, Location, Sample
-        FROM soykb.Genescape_output
+        SELECT Classification, Improvement_Status, Maturity_Group, Country, State, Accession
+        FROM soykb.Genescape_output2
         WHERE (Gene IN ('".$gene."'))
         AND Position = '".$position."'
         AND Genotype_with_Description = '".$genotype_with_description."'
-        AND Category LIKE '%soja%' ORDER BY Sample;
+        AND Improvement_Status LIKE '%soja%' ORDER BY Accession;
     ";
 } else if(preg_match("/cultivar/i", strval($key))){
     $query_str = "
-        SELECT Type, Category, Number, Country, Location, Sample
-        FROM soykb.Genescape_output
+        SELECT Classification, Improvement_Status, Maturity_Group, Country, State, Accession
+        FROM soykb.Genescape_output2
         WHERE (Gene IN ('".$gene."'))
         AND Position = '".$position."'
         AND Genotype_with_Description = '".$genotype_with_description."'
-        AND (Category LIKE '%cultivar%' OR Category LIKE '%elite%')
-        ORDER BY Sample;
+        AND (Improvement_Status LIKE '%cultivar%' OR Improvement_Status LIKE '%elite%')
+        ORDER BY Accession;
     ";
 } else if(preg_match("/landrace/i", strval($key))){
     $query_str = "
-        SELECT Type, Category, Number, Country, Location, Sample
-        FROM soykb.Genescape_output
+        SELECT Classification, Improvement_Status, Maturity_Group, Country, State, Accession
+        FROM soykb.Genescape_output2
         WHERE (Gene IN ('".$gene."'))
         AND Position = '".$position."'
         AND Genotype_with_Description = '".$genotype_with_description."'
-        AND Category LIKE '%landrace%'
-        ORDER BY Sample;
+        AND Improvement_Status LIKE '%landrace%'
+        ORDER BY Accession;
     ";
 } else if(preg_match("/total/i", strval($key))){
     $query_str = "
-        SELECT Type, Category, Number, Country, Location, Sample
-        FROM soykb.Genescape_output
+        SELECT Classification, Improvement_Status, Maturity_Group, Country, State, Accession
+        FROM soykb.Genescape_output2
         WHERE (Gene IN ('".$gene."'))
         AND Position = '".$position."'
         AND Genotype_with_Description = '".$genotype_with_description."'
-        ORDER BY Sample;
+        ORDER BY Accession;
     ";
 } else if(preg_match("/na.anc/i", strval($key))){
     $query_str = "
-        SELECT Type, Category, Number, Country, Location, Sample
-        FROM soykb.Genescape_output
+        SELECT Classification, Improvement_Status, Maturity_Group, Country, State, Accession
+        FROM soykb.Genescape_output2
         WHERE (Gene IN ('".$gene."'))
         AND Position = '".$position."'
         AND Genotype_with_Description = '".$genotype_with_description."'
-        AND Ancestry_binary IS NOT NULL
-        ORDER BY Sample;
+        AND Ancestry_Binary IS NOT NULL
+        ORDER BY Accession;
     ";
 }
 

@@ -67,3 +67,51 @@ function downloadAllByGene(gene) {
     });
 
 }
+
+
+function downloadAllCountByGene(gene) {
+
+    $.ajax({
+        url: 'GenescapeAnalysis_PHP/downloadAccessionCount.php',
+        type: 'GET',
+        contentType: 'application/json',
+        data: {
+            Gene: gene,
+        },
+        success: function (response) {
+            var res = JSON.parse(response);
+            res = res.data[0];
+
+            let keys = Object.keys(res[0]);
+            let sorted_keys = ['Soja', 'Cultivar', 'Landrace', 'Total', 'NA_ANC', 'Gene'];
+
+            for (let i=0; i<keys.length; i++){
+                if(!isNaN(Number(keys[i]))){
+                    sorted_keys.push(keys[i]);
+                }
+            }
+
+            sorted_renamed_keys = Array.from(sorted_keys);
+            sorted_renamed_keys[4] = 'NA_Cultivar';
+            var csv_str = sorted_renamed_keys.join(',')+'\n';
+
+            for (let i=0; i<res.length; i++){
+                for (let j=0; j<sorted_keys.length; j++){
+                    if(j >= (sorted_keys.length-1)){
+                        csv_str += res[i][sorted_keys[j]];
+                    } else{
+                        csv_str += res[i][sorted_keys[j]]+',';
+                    }
+                }
+                csv_str += '\n';
+            }
+
+            createAndDownloadCsvFile(csv_str, gene+"_accession_count_data");
+
+        },
+        error: function(xhr, status, error){
+            console.log('Error with code ' + xhr.status + ': ' + xhr.statusText);
+        }
+    });
+
+}

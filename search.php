@@ -34,7 +34,7 @@ include '../header.php';
 // echo "hello"
 ?>
 
-<script type="text/javascript">
+<script type="text/javascript" language="javascript">
 </script>
 
 <?php include '../footer.php'; ?>

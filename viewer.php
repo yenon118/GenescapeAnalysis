@@ -1,13 +1,14 @@
 
 <?php
+
 $TITLE = "Genescape Analysis";
 include '../header.php';
 include './GenescapeAnalysis_PHP/dataProcessor.php';
-?>
 
-<link rel="stylesheet" href="css/modal.css">
 
-<?php
+echo '<link rel="stylesheet" href="css/modal.css">';
+
+
 $gene = $_GET['gene'];
 
 if (isset($gene) && !empty($gene)){
@@ -18,25 +19,27 @@ if (isset($gene) && !empty($gene)){
     echo "<br />";
     // $query_str = "SELECT * FROM soykb.Genescape_output WHERE (Gene IN (".implode(",", $gene_arr)."));";
     $query_str = "
-        SELECT A.Count, B.NA_ANC, A.Category, A.Gene, A.Position, A.Genotype_with_Description
-        FROM (SELECT COUNT(*) AS Count, Category, Gene, Position, Genotype_with_Description
-        FROM soykb.Genescape_output
+        SELECT A.Count, B.NA_ANC, A.Improvement_Status, A.Gene, A.Position, A.Genotype_with_Description
+        FROM (SELECT COUNT(*) AS Count, Improvement_Status, Gene, Position, Genotype_with_Description
+        FROM soykb.Genescape_output2
         WHERE (Gene IN (".implode(",", $gene_arr)."))
-        GROUP BY Category, Gene, Position, Genotype_with_Description
-        ORDER BY Gene, Position, Genotype_with_Description, Category) AS A
+        GROUP BY Improvement_Status, Gene, Position, Genotype_with_Description
+        ORDER BY Gene, Position, Genotype_with_Description, Improvement_Status) AS A
         LEFT JOIN (
-        SELECT COUNT(*) AS NA_ANC, Category, Gene, Position, Genotype_with_Description FROM soykb.Genescape_output
-        WHERE ((Gene IN (".implode(",", $gene_arr).")) AND (Ancestry_binary IS NOT NULL))
-        GROUP BY Category, Gene, Position, Genotype_with_Description, Ancestry_binary
-        ORDER BY Gene, Position, Genotype_with_Description, Category) AS B
-        ON A.Category = B.Category AND A.Gene = B.Gene AND A.Position = B.Position AND A.Genotype_with_Description = B.Genotype_with_Description
-        ORDER BY A.Gene, A.Position, A.Genotype_with_Description, A.Category;
+        SELECT COUNT(*) AS NA_ANC, Improvement_Status, Gene, Position, Genotype_with_Description
+        FROM soykb.Genescape_output2
+        WHERE ((Gene IN (".implode(",", $gene_arr).")) AND (Ancestry_Binary IS NOT NULL))
+        GROUP BY Improvement_Status, Gene, Position, Genotype_with_Description, Ancestry_Binary
+        ORDER BY Gene, Position, Genotype_with_Description, Improvement_Status) AS B
+        ON A.Improvement_Status = B.Improvement_Status AND A.Gene = B.Gene AND A.Position = B.Position AND A.Genotype_with_Description = B.Genotype_with_Description
+        ORDER BY A.Gene, A.Position, A.Genotype_with_Description, A.Improvement_Status;
     ";
     $result = mysql_query($query_str);
     $result_arr = array();
     if(mysql_num_rows($result) > 0){
         while ($row = mysql_fetch_assoc($result)) {
             array_push($result_arr, $row);
+            // echo $row;
         }
     }
 
@@ -73,7 +76,11 @@ if (isset($gene) && !empty($gene)){
         echo "<tr>";
         foreach($segment_arr[0] as $key => $value){
             if ($key != "Position" && $key != "Genotype_with_Description"){
-                echo "<th>".$key."</th>";
+                if($key == "NA_ANC"){
+                    echo "<th>NA Cultivar</th>";
+                }else{
+                    echo "<th>".$key."</th>";
+                }
             }
         }
         echo "</tr>";
@@ -152,14 +159,28 @@ if (isset($gene) && !empty($gene)){
 
         echo "</table>";
         echo "</div>";
-        echo "<div style='margin-top:10px;' align='right'><button onclick=\"downloadAllByGene('".$result_arr[$i][0]["Gene"]."')\"> Download </button></div>";
+        echo "<div style='margin-top:10px;' align='right'>";
+        echo "<button onclick=\"downloadAllCountByGene('".$result_arr[$i][0]["Gene"]."')\" style=\"margin-right:20px;\"> Download (Accession Counts)</button>";
+        echo "<button onclick=\"downloadAllByGene('".$result_arr[$i][0]["Gene"]."')\"> Download (All Accessions)</button>";
+        echo "</div>";
         echo "<br/><br/>";
     }
+
+
+    if(count($result_arr) > 0){
+        echo "<br/><br/>";
+        echo "<div style='margin-top:10px;' align='center'>";
+        echo "<button type=\"submit\" onclick=\"window.open('https://de.cyverse.org/dl/d/496DEACF-8067-45DC-9033-27F17FF2E960/genescape_output_v2.tar.gz')\">Download Full Dataset</button>";
+        echo "</div>";
+        echo "<br/><br/>";
+    }
+
+
+    // echo '<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>';
+    echo '<script type="text/javascript" language="javascript" src="./js/getSamples.js"></script>';
+    echo '<script type="text/javascript" language="javascript" src="./js/download.js"></script>';
+    echo '<script type="text/javascript" language="javascript" src="./js/modal.js"></script>';
+
+    include '../footer.php';
+
 ?>
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="./js/getSamples.js"></script>
-<script type="text/javascript" src="./js/download.js"></script>
-<script type="text/javascript" src="./js/modal.js"></script>
-
-<?php include '../footer.php'; ?>

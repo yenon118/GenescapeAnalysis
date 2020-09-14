@@ -8,7 +8,7 @@ function dataProcessor($result_arr){
     $prev_state_soja = 0;
     $prev_state_cultivar = 0;
     $prev_state_count = 0;
-    $prev_state_category = "";
+    $prev_state_improvement_status = "";
     $prev_state_gene = "";
     $prev_state_position = "";
     $prev_state_genotype_with_description = "";
@@ -21,16 +21,16 @@ function dataProcessor($result_arr){
             $prev_state_soja = 0;
             $prev_state_cultivar = 0;
             $prev_state_count = intval($result_arr[$i]['Count']);
-            $prev_state_category = $result_arr[$i]['Category'];
+            $prev_state_improvement_status = $result_arr[$i]['Improvement_Status'];
             $prev_state_gene = $result_arr[$i]['Gene'];
             $prev_state_position = $result_arr[$i]['Position'];
             $prev_state_genotype_with_description = $result_arr[$i]['Genotype_with_Description'];
             $prev_state_na_ancestor = intval($result_arr[$i]['NA_ANC']);
-            if(preg_match("/soja/i", strval($result_arr[$i]['Category']))){
+            if(preg_match("/soja/i", strval($result_arr[$i]['Improvement_Status']))){
                 $prev_state_soja=intval($result_arr[$i]['Count']);
-            } else if(preg_match("/cultivar/i", strval($result_arr[$i]['Category'])) || preg_match("/elite/i", strval($result_arr[$i]['Category']))){
+            } else if(preg_match("/cultivar/i", strval($result_arr[$i]['Improvement_Status'])) || preg_match("/elite/i", strval($result_arr[$i]['Improvement_Status']))){
                 $prev_state_cultivar=intval($result_arr[$i]['Count']);
-            } else if(preg_match("/landrace/i", strval($result_arr[$i]['Category']))){
+            } else if(preg_match("/landrace/i", strval($result_arr[$i]['Improvement_Status']))){
                 $prev_state_landrace=intval($result_arr[$i]['Count']);
             }
 
@@ -89,11 +89,11 @@ function dataProcessor($result_arr){
 
 
         } else if($result_arr[$i]['Gene'] == $prev_state_gene && $result_arr[$i]['Position'] == $prev_state_position && $result_arr[$i]['Genotype_with_Description'] == $prev_state_genotype_with_description){
-            if(preg_match("/soja/i", strval($result_arr[$i]['Category']))){
+            if(preg_match("/soja/i", strval($result_arr[$i]['Improvement_Status']))){
                 $prev_state_soja=$prev_state_soja + intval($result_arr[$i]['Count']);
-            } else if(preg_match("/cultivar/i", strval($result_arr[$i]['Category'])) || preg_match("/elite/i", strval($result_arr[$i]['Category']))){
+            } else if(preg_match("/cultivar/i", strval($result_arr[$i]['Improvement_Status'])) || preg_match("/elite/i", strval($result_arr[$i]['Improvement_Status']))){
                 $prev_state_cultivar=$prev_state_cultivar + intval($result_arr[$i]['Count']);
-            } else if(preg_match("/landrace/i", strval($result_arr[$i]['Category']))){
+            } else if(preg_match("/landrace/i", strval($result_arr[$i]['Improvement_Status']))){
                 $prev_state_landrace=$prev_state_landrace + intval($result_arr[$i]['Count']);
             }
             $prev_state_na_ancestor = $prev_state_na_ancestor + intval($result_arr[$i]['NA_ANC']);
