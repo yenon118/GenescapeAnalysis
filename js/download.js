@@ -115,3 +115,36 @@ function downloadAllCountByGene(gene) {
     });
 
 }
+
+
+function downloadAllByAccessionAndGene(accession, gene){
+    if(accession != null && accession != undefined){
+        let accession_arr = accession.split(";");
+        if(accession_arr.length > 0){
+
+            $.ajax({
+                url: 'GenescapeAnalysis_PHP/downloadAllByAccessionAndGene.php',
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                    Gene: gene,
+                    Accession: accession_arr
+                },
+                success: function (response) {
+                    var res = JSON.parse(response);
+                    res = res.data;
+
+                    if (res.length > 0){
+                        var csv_str = convertJsonToCsv(res);
+                        createAndDownloadCsvFile(csv_str, gene+"_and_accessions_data");
+                    }
+
+                },
+                error: function(xhr, status, error){
+                    console.log('Error with code ' + xhr.status + ': ' + xhr.statusText);
+                }
+            });
+
+        }
+    }
+}
