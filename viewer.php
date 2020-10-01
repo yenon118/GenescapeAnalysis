@@ -170,7 +170,9 @@ if (isset($gene) && !empty($gene)){
     if(count($result_arr) > 0){
         echo "<br/><br/>";
         echo "<div style='margin-top:10px;' align='center'>";
-        echo "<button type=\"submit\" onclick=\"window.open('https://de.cyverse.org/dl/d/496DEACF-8067-45DC-9033-27F17FF2E960/genescape_output_v2.tar.gz')\">Download Full Dataset</button>";
+        echo "<button type=\"submit\" onclick=\"window.open('https://de.cyverse.org/dl/d/761101E5-B0C7-461C-8FB9-BDFB11292A7A/Accession_info.csv')\">Download Accession Information</button>";
+        // echo "&nbsp;&nbsp;";
+        // echo "<button type=\"submit\" onclick=\"window.open('https://de.cyverse.org/dl/d/496DEACF-8067-45DC-9033-27F17FF2E960/genescape_output_v2.tar.gz')\">Download Full Dataset</button>";
         echo "</div>";
         echo "<br/><br/>";
     }
