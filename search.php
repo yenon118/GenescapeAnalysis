@@ -1,6 +1,6 @@
 
 <?php
-$TITLE = "Genescape Analysis";
+$TITLE = "Soybean Allele Catalog";
 include '../header.php';
 ?>
 
