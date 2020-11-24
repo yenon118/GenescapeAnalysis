@@ -13,6 +13,9 @@ if (isset($accession) && !empty($accession) && isset($gene) && !empty($gene)){
     for ($i=0; $i<count($accession_arr); $i++){
         $accession_arr[$i] = "'".trim($accession_arr[$i])."'";
     }
+
+    echo "<a href=\"search.php\"><button> < Back </button></a>";
+    echo "<br />";
     echo "<br />";
 
     $query_str = "
@@ -55,6 +58,8 @@ if (isset($accession) && !empty($accession) && isset($gene) && !empty($gene)){
     $exon_loss_variant_color_code = "#F26A55";
     $lost_color_code = "#F26A55";
     $gain_color_code = "#F26A55";
+    $disruptive_color_code = "#F26A55";
+    $splice_color_code = "#9EE85C";
 
     if(count($result_arr) > 0){
         echo "<div style='width:100%;height:100%; border:3px solid #000; overflow:scroll;max-height:1000px;'>";
@@ -95,6 +100,10 @@ if (isset($accession) && !empty($accession) && isset($gene) && !empty($gene)){
                             $temp_value_arr = preg_split("/[;, |\n]+/", $value);
                             $temp_value = (count($temp_value_arr) > 2 ? $temp_value_arr[0]."|".$temp_value_arr[2] : $value);
                             echo "<td style=\"min-width:80px;background-color:".$gain_color_code."\">".$value."</td>";
+                        } else if (preg_match("/disruptive/i", $value)){
+                            echo "<td style=\"min-width:80px;background-color:".$disruptive_color_code."\">".$value."</td>";
+                        } else if (preg_match("/splice/i", $value)){
+                            echo "<td style=\"min-width:80px;background-color:".$splice_color_code."\">".$value."</td>";
                         } else if (preg_match("/ref/i", $value)){
                             echo "<td style=\"min-width:80px;background-color:".$ref_color_code."\">".$value."</td>";
                         } else{

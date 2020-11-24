@@ -148,3 +148,89 @@ function downloadAllByAccessionAndGene(accession, gene){
         }
     }
 }
+
+
+function downloadAllCountByMultipleGene(gene_arr_string){
+    if(gene_arr_string != null && gene_arr_string != undefined){
+        let gene_arr = gene_arr_string.split(";");
+        if(gene_arr.length > 0){
+            // console.log(gene_arr);
+
+            $.ajax({
+                url: 'GenescapeAnalysis_PHP/downloadAllCountByMultipleGene.php',
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                    Gene: gene_arr
+                },
+                success: function (response) {
+                    var res = JSON.parse(response);
+                    res = res.data;
+                    // console.log(res);
+
+                    let sorted_keys = [
+                        'Soja', 'Cultivar', 'Landrace', 'Total', 'NA_ANC', 'Gene', 'Position', 'Genotype', 'Genotype_with_Description'
+                    ];
+
+                    sorted_renamed_keys = Array.from(sorted_keys);
+                    sorted_renamed_keys[4] = 'NA_Cultivar';
+                    var csv_str = sorted_renamed_keys.join(',')+'\n';
+
+                    for (let i=0; i<res.length; i++){
+                        for (let j=0; j<res[i].length; j++){
+                            for (let k=0; k<sorted_keys.length; k++){
+                                if(k >= (sorted_keys.length-1)){
+                                    csv_str += res[i][j][sorted_keys[k]];
+                                } else{
+                                    csv_str += res[i][j][sorted_keys[k]]+',';
+                                }
+
+                            }
+                            csv_str += '\n';
+                        }
+                    }
+
+                    createAndDownloadCsvFile(csv_str, "all_genes_and_accession_counts_data");
+
+                },
+                error: function(xhr, status, error){
+                    console.log('Error with code ' + xhr.status + ': ' + xhr.statusText);
+                }
+            });
+
+        }
+    }
+}
+
+
+function downloadAllByMultipleGene(gene_arr_string){
+    if(gene_arr_string != null && gene_arr_string != undefined){
+        let gene_arr = gene_arr_string.split(";");
+        if(gene_arr.length > 0){
+            // console.log(gene_arr);
+
+            $.ajax({
+                url: 'GenescapeAnalysis_PHP/downloadAllByMultipleGene.php',
+                type: 'GET',
+                contentType: 'application/json',
+                data: {
+                    Gene: gene_arr
+                },
+                success: function (response) {
+                    var res = JSON.parse(response);
+                    res = res.data;
+
+                    if (res.length > 0){
+                        var csv_str = convertJsonToCsv(res);
+                        createAndDownloadCsvFile(csv_str, "all_genes_and_accessions_data");
+                    }
+
+                },
+                error: function(xhr, status, error){
+                    console.log('Error with code ' + xhr.status + ': ' + xhr.statusText);
+                }
+            });
+
+        }
+    }
+}

@@ -42,6 +42,14 @@ include '../header.php';
         <tr>
         </tr>
     </table>
+
+    <br />
+    <br />
+
+</div>
+
+<div style='margin-top:10px;' align='center'>
+    <button type="submit" onclick="window.open('https://de.cyverse.org/dl/d/761101E5-B0C7-461C-8FB9-BDFB11292A7A/Accession_info.csv')" style="margin-right:20px;">Download Accession Information</button>
 </div>
 
 <?php

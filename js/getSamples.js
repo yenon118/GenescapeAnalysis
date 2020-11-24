@@ -5,6 +5,8 @@ function constructInfoTable(arr) {
     var exon_loss_variant_color_code = "#F26A55";
     var lost_color_code = "#F26A55";
     var gain_color_code = "#F26A55";
+    var disruptive_color_code = "#F26A55";
+    var splice_color_code = "#9EE85C";
 
     // Put data into modal
     document.getElementById('modal-content-div').innerHTML = "<table id='modal-content-table'><tr id='modal-content-table-head'></tr></table>";
@@ -58,6 +60,10 @@ function constructInfoTable(arr) {
                     document.getElementById(modal_content_table_data_id).innerHTML += "<td style=\"min-width:80px;text-align:center;background-color:"+lost_color_code+"\">"+arr[i][keys[j]]+"</td>";
                 } else if(arr[i][keys[j]].search(/gain/i) != -1 && arr[i][keys[j]].search(/gain/i) != undefined){
                     document.getElementById(modal_content_table_data_id).innerHTML += "<td style=\"min-width:80px;text-align:center;background-color:"+gain_color_code+"\">"+arr[i][keys[j]]+"</td>";
+                } else if(arr[i][keys[j]].search(/disruptive/i) != -1 && arr[i][keys[j]].search(/gain/i) != undefined){
+                    document.getElementById(modal_content_table_data_id).innerHTML += "<td style=\"min-width:80px;text-align:center;background-color:"+disruptive_color_code+"\">"+arr[i][keys[j]]+"</td>";
+                } else if(arr[i][keys[j]].search(/splice/i) != -1 && arr[i][keys[j]].search(/gain/i) != undefined){
+                    document.getElementById(modal_content_table_data_id).innerHTML += "<td style=\"min-width:80px;text-align:center;background-color:"+splice_color_code+"\">"+arr[i][keys[j]]+"</td>";
                 } else if(arr[i][keys[j]].search(/ref/i) != -1 && arr[i][keys[j]].search(/ref/i) != undefined){
                     document.getElementById(modal_content_table_data_id).innerHTML += "<td style=\"min-width:80px;text-align:center;background-color:"+ref_color_code+"\">"+arr[i][keys[j]]+"</td>";
                 } else{

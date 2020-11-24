@@ -13,10 +13,16 @@ $gene = $_GET['gene'];
 
 if (isset($gene) && !empty($gene)){
     $gene_arr = preg_split("/[;, \n]+/", $gene);
+    $gene_arr2 = preg_split("/[;, \n]+/", $gene);
     for ($i=0; $i<count($gene_arr); $i++){
         $gene_arr[$i] = "'".trim($gene_arr[$i])."'";
+        $gene_arr2[$i] = trim($gene_arr2[$i]);
     }
+
+    echo "<a href=\"search.php\"><button> < Back </button></a>";
     echo "<br />";
+    echo "<br />";
+    
     // $query_str = "SELECT * FROM soykb.Genescape_output WHERE (Gene IN (".implode(",", $gene_arr)."));";
     $query_str = "
         SELECT A.Count, B.NA_ANC, A.Improvement_Status, A.Gene, A.Position, A.Genotype_with_Description
@@ -68,6 +74,8 @@ if (isset($gene) && !empty($gene)){
     $exon_loss_variant_color_code = "#F26A55";
     $lost_color_code = "#F26A55";
     $gain_color_code = "#F26A55";
+    $disruptive_color_code = "#F26A55";
+    $splice_color_code = "#9EE85C";
 
     for ($i=0; $i<count($result_arr); $i++){
         $segment_arr = $result_arr[$i];
@@ -146,6 +154,10 @@ if (isset($gene) && !empty($gene)){
                             $temp_value_arr = preg_split("/[;, |\n]+/", $value);
                             $temp_value = (count($temp_value_arr) > 2 ? $temp_value_arr[0]."|".$temp_value_arr[2] : $value);
                             echo "<td style=\"min-width:80px;background-color:".$gain_color_code."\">".$value."</td>";
+                        } else if (preg_match("/disruptive/i", $value)){
+                            echo "<td style=\"min-width:80px;background-color:".$disruptive_color_code."\">".$value."</td>";
+                        } else if (preg_match("/splice/i", $value)){
+                            echo "<td style=\"min-width:80px;background-color:".$splice_color_code."\">".$value."</td>";
                         } else if (preg_match("/ref/i", $value)){
                             echo "<td style=\"min-width:80px;background-color:".$ref_color_code."\">".$value."</td>";
                         } else{
@@ -170,8 +182,9 @@ if (isset($gene) && !empty($gene)){
     if(count($result_arr) > 0){
         echo "<br/><br/>";
         echo "<div style='margin-top:10px;' align='center'>";
-        echo "<button type=\"submit\" onclick=\"window.open('https://de.cyverse.org/dl/d/761101E5-B0C7-461C-8FB9-BDFB11292A7A/Accession_info.csv')\">Download Accession Information</button>";
-        // echo "&nbsp;&nbsp;";
+        echo "<button type=\"submit\" onclick=\"window.open('https://de.cyverse.org/dl/d/761101E5-B0C7-461C-8FB9-BDFB11292A7A/Accession_info.csv')\" style=\"margin-right:20px;\">Download Accession Information</button>";
+        echo "<button onclick=\"downloadAllCountByMultipleGene('".implode(";", $gene_arr2)."')\" style=\"margin-right:20px;\"> Download All (Accession Counts)</button>";
+        echo "<button onclick=\"downloadAllByMultipleGene('".implode(";", $gene_arr2)."')\" style=\"margin-right:20px;\"> Download All (All Accessions)</button>";
         // echo "<button type=\"submit\" onclick=\"window.open('https://de.cyverse.org/dl/d/496DEACF-8067-45DC-9033-27F17FF2E960/genescape_output_v2.tar.gz')\">Download Full Dataset</button>";
         echo "</div>";
         echo "<br/><br/>";
