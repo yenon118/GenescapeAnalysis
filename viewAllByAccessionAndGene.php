@@ -11,7 +11,7 @@ $gene = $_GET['gene'];
 if (isset($accession) && !empty($accession) && isset($gene) && !empty($gene)){
     $accession_arr = preg_split("/[;, \n]+/", $accession);
     for ($i=0; $i<count($accession_arr); $i++){
-        $accession_arr[$i] = "'".trim($accession_arr[$i])."'";
+        $accession_arr[$i] = "(Accession LIKE '%".trim($accession_arr[$i])."%')";
     }
 
     echo "<a href=\"search.php\"><button> < Back </button></a>";
@@ -21,7 +21,7 @@ if (isset($accession) && !empty($accession) && isset($gene) && !empty($gene)){
     $query_str = "
         SELECT Classification, Improvement_Status, Maturity_Group, Country, State, Accession, Gene, Position, Genotype, Genotype_with_Description
         FROM soykb.Genescape_output2
-        WHERE (Gene IN ('".$gene."')) AND (Accession IN (".implode(",", $accession_arr)."));
+        WHERE (Gene IN ('".$gene."')) AND (".implode(" OR ", $accession_arr).");
     ";
 
     $result = mysql_query($query_str);
